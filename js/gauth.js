@@ -179,7 +179,7 @@
 
                 // Construct HTML
                 var accName = $('<p>').text(account.name).html();  // print as-is
-                var detLink = $('<span class="secret"><h3>' + key + '</h3>' + accName + '</span>');
+                var detLink = $(`<span class="secret">${accName}<h3>${key}</h3></span>`);
                 var accElem = $('<li data-icon="false">').append(detLink);
  
                 if(editingEnabled) {
@@ -188,6 +188,14 @@
                         deleteAccount(index);
                     });
                     accElem.append(delLink);
+                } else {
+                    accElem.click(function () {
+                        navigator.clipboard.writeText(key).then(function () {
+                            console.log(`Copied key ${key} for ${account.name}`)
+                        }).catch(function (e) {
+                            console.error('Unable to copy key: missing clipboard access permission', e);
+                        });
+                    });
                 }
 
                 // Add HTML element
